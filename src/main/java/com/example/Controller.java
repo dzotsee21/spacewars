@@ -22,6 +22,7 @@ import javafx.util.Duration;
 
 public class Controller {
     private double moveSpeed = 4;
+    private double speedX = 5.0;
     List<Enemy> enemiesList = new ArrayList<>();
 
     @FXML
@@ -62,7 +63,7 @@ public class Controller {
         player.setCenterX(playerX-=moveSpeed);
     }
 
-    public Line shootAmmo() {
+    public Line shootAmmo(Pane rootPane) {
         Line ammo = new Line();
         ammo.setFill(Color.WHITE);
         ammo.setStroke(Color.WHITE);
@@ -84,12 +85,20 @@ public class Controller {
         ammo.setEndX(ammoEndX);
         ammo.setEndY(ammoEndY);
 
+        rootPane.getChildren().add(ammo);
+
+        TranslateTransition translate = new TranslateTransition();
+        translate.setNode(ammo);
+        translate.setByY(ammo.getStartY()-1500);
+        translate.setDuration(Duration.millis(1000));
+        translate.play();
+
         return ammo;
     }
 
     public void spawnEnemies(Pane rootPane, Stage stage, int spawnNum) {
         int distance = 0;
-        while(spawnNum >= 0) {
+        while(spawnNum > 0) {
             Enemy enemyObj = new Enemy(4, damageDealt);
 
             enemyObj.setCenterX(250+distance);
@@ -98,10 +107,21 @@ public class Controller {
             enemyObj.setFill(Color.RED);
 
             rootPane.getChildren().add(enemyObj);
+
             enemiesList.add(enemyObj);
             
             spawnNum--;
             distance+=80;
+        }
+    }
+
+    public void moveEnemies(Stage stage) {
+        for(Enemy enemyObject : enemiesList) {
+            double newCenterX = enemyObject.getCenterX()+speedX;
+            if(newCenterX >= stage.getWidth()-5 || newCenterX <= 0) {
+                speedX = -speedX;
+            }
+            enemyObject.setCenterX(newCenterX);
         }
     }
 

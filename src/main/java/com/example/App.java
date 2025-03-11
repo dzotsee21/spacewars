@@ -38,7 +38,7 @@ public class App extends Application {
 
         Pane rootPane = (Pane) root;
 
-        controller.spawnEnemies(rootPane, stage, 2);
+        controller.spawnEnemies(rootPane, stage, 1);
 
         setupKeyHandlers(scene, controller, rootPane);
         mainGameLoop(controller, stage);
@@ -64,6 +64,8 @@ public class App extends Application {
                 if(pressedLeft && (controller.playerX+300) > 0) {
                     controller.moveLeft();
                 }
+
+                controller.moveEnemies(stage);
             }
         };
         gameLoop.start();
@@ -104,15 +106,7 @@ public class App extends Application {
                 case SPACE:
                     controller.onPlayAudio();
                     HashMap<Enemy, List<Double>> enemyPositions = controller.getEnemyPos();
-                    Line ammo = controller.shootAmmo();
-
-                    rootPane.getChildren().add(ammo);
-
-                    TranslateTransition translate = new TranslateTransition();
-                    translate.setNode(ammo);
-                    translate.setByY(ammo.getStartY()-1500);
-                    translate.setDuration(Duration.millis(1000));
-                    translate.play();
+                    Line ammo = controller.shootAmmo(rootPane);
 
                     for(Enemy object : enemyPositions.keySet()) {
                         List<Double> enemyPosition = enemyPositions.get(object);
@@ -122,7 +116,7 @@ public class App extends Application {
                                 rootPane.getChildren().remove(object);
                             }
                             else {
-                                System.out.println("DAMAGE TAKEN!");
+                                System.out.println("DAMAGE DEALT!");
                             }
                         }
                     }
