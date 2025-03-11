@@ -6,8 +6,9 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.Controller">
    <children>
-      <Circle fx:id="player" fill="#46ef28" layoutX="300.0" layoutY="360.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+      <Circle fx:id="player" fill="#46ef28" layoutX="300.0" layoutY="333.0" radius="26.0" smooth="false" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
       <MediaView fx:id="mediaView" fitHeight="200.0" fitWidth="200.0" layoutX="200.0" layoutY="71.0" />
+      <Circle fx:id="enemyObject" fill="DODGERBLUE" layoutX="300.0" layoutY="57.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" />
    </children>
 
 </AnchorPane>
