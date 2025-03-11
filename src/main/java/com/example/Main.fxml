@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.media.MediaView?>
 <?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.Controller">
    <children>
       <Circle fx:id="player" fill="#46ef28" layoutX="300.0" layoutY="333.0" radius="26.0" smooth="false" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
       <MediaView fx:id="mediaView" fitHeight="200.0" fitWidth="200.0" layoutX="200.0" layoutY="71.0" />
-      <Circle fx:id="enemyObject" fill="DODGERBLUE" layoutX="300.0" layoutY="57.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" />
+      <Label prefHeight="62.0" prefWidth="111.0" text="Damage dealt:">
+         <font>
+            <Font name="Agency FB" size="21.0" />
+         </font>
+      </Label>
+      <Label fx:id="damageDealt" layoutX="94.0" layoutY="17.0" text="0">
+         <font>
+            <Font name="Agency FB" size="23.0" />
+         </font>
+      </Label>
    </children>
 
 </AnchorPane>

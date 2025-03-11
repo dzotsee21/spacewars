@@ -3,28 +3,14 @@ package com.example;
 import javafx.animation.AnimationTimer;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,11 +31,14 @@ public class App extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Main.fxml"));
         Parent root = loader.load();
+        root.setId("pane");
         Controller controller = loader.getController();
         Scene scene = new Scene(root);
-
+        scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 
         Pane rootPane = (Pane) root;
+
+        controller.spawnEnemies(rootPane, stage, 2);
 
         setupKeyHandlers(scene, controller, rootPane);
         mainGameLoop(controller, stage);
@@ -114,7 +103,7 @@ public class App extends Application {
                     break; 
                 case SPACE:
                     controller.onPlayAudio();
-                    HashMap<Circle, List<Double>> enemyPositions = controller.getEnemyPos();
+                    HashMap<Enemy, List<Double>> enemyPositions = controller.getEnemyPos();
                     Line ammo = controller.shootAmmo();
 
                     rootPane.getChildren().add(ammo);
@@ -125,12 +114,18 @@ public class App extends Application {
                     translate.setDuration(Duration.millis(1000));
                     translate.play();
 
-                    for(Circle object : enemyPositions.keySet()) {
-                        if(ammo.getStartX() >= enemyPositions.get(object).get(0) && ammo.getStartX() <= enemyPositions.get(object).get(1)) {
-                            rootPane.getChildren().remove(object);
+                    for(Enemy object : enemyPositions.keySet()) {
+                        List<Double> enemyPosition = enemyPositions.get(object);
+                        if(ammo.getStartX() >= enemyPosition.get(0) && ammo.getStartX() <= enemyPosition.get(1) && ammo.getStartY() >= enemyPosition.get(2)) {
+                            boolean damaged = object.damage(1);
+                            if(damaged) {
+                                rootPane.getChildren().remove(object);
+                            }
+                            else {
+                                System.out.println("DAMAGE TAKEN!");
+                            }
                         }
                     }
-
                     break;
             }
         });

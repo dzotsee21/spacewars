@@ -6,35 +6,32 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class Controller {
     private double moveSpeed = 4;
-
-    private double ammoStartX;
-    private double ammoStartY;
-    private double ammoEndX;
-    private double ammoEndY;
+    List<Enemy> enemiesList = new ArrayList<>();
 
     @FXML
     private Circle player;
     double playerX;
     double playerY;
     @FXML
-    private Circle enemyObject;
-    private double enemyObjectX;
-    private double enmyObjectY;
-
+    Label damageDealt;
     @FXML
     private MediaView mediaView;
-
 
     // methods
     public void onPlayAudio() {
@@ -67,6 +64,13 @@ public class Controller {
 
     public Line shootAmmo() {
         Line ammo = new Line();
+        ammo.setFill(Color.WHITE);
+        ammo.setStroke(Color.WHITE);
+        double ammoStartX;
+        double ammoStartY;
+        double ammoEndX;
+        double ammoEndY;
+
         ammo.setFill(Color.AQUA);
         ammoStartX = playerX+300;
         ammoStartY = playerY+313;
@@ -83,13 +87,44 @@ public class Controller {
         return ammo;
     }
 
-    public HashMap<Circle, List<Double>> getEnemyPos() {
-        double startX = ((enemyObject.getCenterX()+300)-enemyObject.getRadius());
-        double endX = ((enemyObject.getCenterX()+300)+enemyObject.getRadius());
+    public void spawnEnemies(Pane rootPane, Stage stage, int spawnNum) {
+        int distance = 0;
+        while(spawnNum >= 0) {
+            Enemy enemyObj = new Enemy(4, damageDealt);
 
-        HashMap<Circle, List<Double>> enemyPos = new HashMap<Circle, List<Double>>();
-        enemyPos.put(enemyObject, Arrays.asList(startX, endX));
+            enemyObj.setCenterX(250+distance);
+            enemyObj.setCenterY(100);
+            enemyObj.setRadius(26);
+            enemyObj.setFill(Color.RED);
 
-        return enemyPos;
+            rootPane.getChildren().add(enemyObj);
+            enemiesList.add(enemyObj);
+            
+            spawnNum--;
+            distance+=80;
+        }
+    }
+
+    private List<Enemy> checkEnemies() {
+        List<Enemy> aliveEnemies = new ArrayList<>();
+        for(Enemy enemyObject : enemiesList) {
+            if(enemyObject.hp > 0) {
+                aliveEnemies.add(enemyObject);
+            }
+        }
+        return aliveEnemies;
+    }
+
+    public HashMap<Enemy, List<Double>> getEnemyPos() {
+        HashMap<Enemy, List<Double>> enemiesPos = new HashMap<Enemy, List<Double>>();
+        enemiesList = checkEnemies();
+        for(Enemy enemyObject : enemiesList) {
+            double startX = ((enemyObject.getCenterX())-enemyObject.getRadius());
+            double endX = ((enemyObject.getCenterX())+enemyObject.getRadius());
+            double startY = enemyObject.getCenterY();
+
+            enemiesPos.put(enemyObject, Arrays.asList(startX, endX, startY));
+        }
+        return enemiesPos;
     }
 }
