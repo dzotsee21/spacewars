@@ -76,6 +76,8 @@ public class App extends Application {
                 
                 controller.moveAmmo(rootPane);
                 controller.checkIfHit(rootPane);
+
+                controller.checkNewWave(rootPane, stage);
             }
         };
         gameLoop.start();

@@ -24,6 +24,7 @@ import javafx.util.Duration;
 public class Controller {
     private double moveSpeed = 5;
     private double ammoSpeedY = -6.0;
+    private int waveNum = 1;
     List<Enemy> enemiesList = new ArrayList<>();
     List<Line> ammoList = new ArrayList<>();
 
@@ -131,7 +132,7 @@ public class Controller {
         }
     }
 
-    public void spawnEnemies(Pane rootPane, Stage stage, int spawnNum, int enemyHealth, double speed) {
+    void spawnEnemies(Pane rootPane, Stage stage, int spawnNum, int enemyHealth, double speed) {
         int distance = 0;
         while(spawnNum > 0) {
             Enemy enemyObj = new Enemy(enemyHealth, speed, damageDealt);
@@ -183,6 +184,27 @@ public class Controller {
             }
         }
         return inRangeAmmos;
+    }
+
+    private boolean checkWave() {
+        List<Enemy> aliveEnemies = new ArrayList<>();
+        for(Enemy enemyObject : enemiesList) {
+            if(enemyObject.hp > 0) {
+                aliveEnemies.add(enemyObject);
+            }
+        }
+        if(aliveEnemies.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
+    public void checkNewWave(Pane rootPane, Stage stage) {
+        boolean waveEnded = checkWave();
+        if(waveEnded) {
+            spawnEnemies(rootPane, stage, 2*waveNum, 5*waveNum, 5);
+            waveNum++;
+        }
     }
 
     public HashMap<Enemy, List<Double>> getEnemyPos() {
