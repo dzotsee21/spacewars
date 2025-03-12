@@ -20,6 +20,16 @@
             <Font name="Agency FB" size="23.0" />
          </font>
       </Label>
+      <Label layoutY="31.0" prefHeight="62.0" prefWidth="111.0" text="Wave: ">
+         <font>
+            <Font name="Agency FB" size="21.0" />
+         </font>
+      </Label>
+      <Label fx:id="waveCount" layoutX="45.0" layoutY="48.0" text="1">
+         <font>
+            <Font name="Agency FB" size="23.0" />
+         </font>
+      </Label>
    </children>
 
 </AnchorPane>

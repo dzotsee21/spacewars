@@ -25,6 +25,7 @@ public class Controller {
     private double ammoSpeedY = -6.0;
     private int waveNum = 1;
     double moveSpeed = 5;
+    int playerDamage = 100;
     List<Enemy> enemiesList = new ArrayList<>();
     List<Line> ammoList = new ArrayList<>();
 
@@ -34,6 +35,8 @@ public class Controller {
     double playerY;
     @FXML
     Label damageDealt;
+    @FXML
+    Label waveCount;
     @FXML
     private MediaView mediaView;
 
@@ -108,7 +111,7 @@ public class Controller {
             for(Enemy enemyObject : enemyPositions.keySet()) {
                 List<Double> enemyPosition = enemyPositions.get(enemyObject);
                 if((ammo.getStartX() >= enemyPosition.get(0) && ammo.getStartX() <= enemyPosition.get(1)) && (ammo.getStartY() >= enemyPosition.get(2) && ammo.getStartY() <= enemyPosition.get(3))) {
-                    boolean damaged = enemyObject.damage(10);
+                    boolean damaged = enemyObject.damage(playerDamage);
                     rootPane.getChildren().remove(ammo);
                     ammoToRemove.add(ammo);
                     if(damaged) {
@@ -204,6 +207,7 @@ public class Controller {
         if(waveEnded) {
             spawnEnemies(rootPane, stage, 2*waveNum, 5*waveNum, 5);
             waveNum++;
+            waveCount.setText(Integer.valueOf(waveNum).toString());
         }
     }
 
