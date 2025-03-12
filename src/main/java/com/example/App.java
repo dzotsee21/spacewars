@@ -77,13 +77,15 @@ public class App extends Application {
                 }
                 if(pressedSpace) {
                     controller.onPlayAudio();
-                    controller.shootAmmo(rootPane, stage);
+                    controller.shootAmmo(rootPane);
+                    controller.shootEnemyAmmo(rootPane);
                     pressedSpace = false;
                 }
                 
                 controller.moveAmmo(rootPane);
+                controller.moveEnemyAmmo(rootPane, stage.getWidth());
                 controller.checkIfHit(rootPane);
-
+                controller.checkIfPlayerHit(rootPane);
                 controller.checkNewWave(rootPane, stage);
             }
         };

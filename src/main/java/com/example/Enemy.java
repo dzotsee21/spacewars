@@ -9,15 +9,19 @@ import javafx.scene.shape.Circle;
 public class Enemy extends Circle{
     int hp;
     double speed;
+    boolean shoot;
     Label damageDealt;
+    boolean[] shootOrNotShoot = {false, false, false, false, false, true};
 
 
     Enemy(int hp, double speed, Label damageDealt) {
         Random random = new Random();
         double[] leftOrRightSpeed = {speed, -speed};
-        int randomChoice = random.nextInt(leftOrRightSpeed.length);
+        int speedRandomChoice = random.nextInt(leftOrRightSpeed.length);
+        int shootRandomChoice = random.nextInt(shootOrNotShoot.length);
         this.hp = hp;
-        this.speed = leftOrRightSpeed[randomChoice];
+        this.speed = leftOrRightSpeed[speedRandomChoice];
+        this.shoot = shootOrNotShoot[shootRandomChoice];
         this.damageDealt = damageDealt;
     }
 

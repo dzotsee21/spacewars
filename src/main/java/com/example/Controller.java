@@ -22,12 +22,14 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Controller {
-    private double ammoSpeedY = -6.0;
+    private double ammoSpeedY = 6.0;
+    private double enemyAmmoSpeedY = 4.0; 
     private int waveNum = 1;
     double moveSpeed = 5;
     int playerDamage = 100;
     List<Enemy> enemiesList = new ArrayList<>();
     List<Line> ammoList = new ArrayList<>();
+    List<Line> enemyAmmoList = new ArrayList<>();
 
     @FXML
     Circle player;
@@ -69,7 +71,7 @@ public class Controller {
         player.setCenterX(playerX-=moveSpeed);
     }
 
-    public void shootAmmo(Pane rootPane, Stage stage) {
+    public void shootAmmo(Pane rootPane) {
         Line ammo = new Line();
         ammo.setFill(Color.WHITE);
         ammo.setStroke(Color.WHITE);
@@ -93,11 +95,51 @@ public class Controller {
         ammoList.add(ammo);        
     }
 
+    
+    public void shootEnemyAmmo(Pane rootPane) {
+        for(Enemy enemyObject : enemiesList) {
+            if(enemyObject.shoot) {
+                System.out.println("HOOT!");
+                Line ammo = new Line();
+                ammo.setFill(Color.WHITE);
+                ammo.setStroke(Color.WHITE);
+                double ammoStartX;
+                double ammoStartY;
+                double ammoEndX;
+                double ammoEndY;
+
+                ammoStartX = enemyObject.getCenterX();
+                ammoStartY = enemyObject.getCenterY();
+
+                ammoEndX = enemyObject.getCenterX();
+                ammoEndY = enemyObject.getCenterY()+10;
+
+                ammo.setStartX(ammoStartX);
+                ammo.setEndX(ammoEndX);
+                ammo.setStartY(ammoStartY);
+                ammo.setEndY(ammoEndY);
+                
+                rootPane.getChildren().add(ammo);
+                enemyAmmoList.add(ammo);                   
+            }
+        }
+    }
+
     public void moveAmmo(Pane rootPane) {
         ammoList = checkAmmos(rootPane);
         for(Line ammo : ammoList) {
-            double newStartY = ammo.getStartY()+ammoSpeedY;
-            double newEndY = ammo.getEndY()+ammoSpeedY;
+            double newStartY = ammo.getStartY()-ammoSpeedY;
+            double newEndY = ammo.getEndY()-ammoSpeedY;
+            ammo.setStartY(newStartY);
+            ammo.setEndY(newEndY);
+        }
+    }
+
+    public void moveEnemyAmmo(Pane rootPane, double width) {
+        enemyAmmoList = checkEnemyAmmos(rootPane, width);
+        for(Line ammo : enemyAmmoList) {
+            double newStartY = ammo.getStartY()+enemyAmmoSpeedY;
+            double newEndY = ammo.getEndY()+enemyAmmoSpeedY;
             ammo.setStartY(newStartY);
             ammo.setEndY(newEndY);
         }
@@ -132,6 +174,19 @@ public class Controller {
 
         for(Line ammo : ammoToRemove) {
             ammoList.remove(ammo);
+        }
+    }
+
+    public void checkIfPlayerHit(Pane rootPane) {
+        double startX = player.getCenterX()-player.getRadius()+300;
+        double endX = player.getCenterX()+player.getRadius()+300;
+        double startY = player.getCenterY()-player.getRadius()+333;
+        double endY = player.getCenterY()+player.getRadius()+333;
+
+        for(Line ammo : enemyAmmoList) {
+            if((ammo.getStartX() >= startX && ammo.getEndX() <= endX) && (ammo.getStartY() >= startY && ammo.getEndY() <= endY)) {
+                System.out.println("KABOOOM MATHA FUCKER!");
+            }
         }
     }
 
@@ -181,6 +236,19 @@ public class Controller {
         for(Line ammo : ammoList) {
             if(ammo.getStartY() >= -10) {
                 inRangeAmmos.add(ammo);  
+            }
+            else {
+                rootPane.getChildren().remove(ammo);
+            }
+        }
+        return inRangeAmmos;
+    }
+
+    private List<Line> checkEnemyAmmos(Pane rootPane, double width) {
+        List<Line> inRangeAmmos = new ArrayList<>();
+        for(Line ammo : enemyAmmoList) {
+            if(ammo.getStartY() <= width) {
+                inRangeAmmos.add(ammo);
             }
             else {
                 rootPane.getChildren().remove(ammo);
