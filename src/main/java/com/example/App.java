@@ -39,7 +39,7 @@ public class App extends Application {
 
         Pane rootPane = (Pane) root;
 
-        controller.spawnEnemies(rootPane, stage, 9, 25);
+        controller.spawnEnemies(rootPane, stage, 3, 25, 5);
 
         setupKeyHandlers(scene, controller, rootPane);
         mainGameLoop(controller, stage, rootPane);

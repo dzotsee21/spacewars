@@ -22,9 +22,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Controller {
-    private double moveSpeed = 4;
-    private double EnemySpeedX = 5.0;
-    private double ammoSpeedY = -5.0;
+    private double moveSpeed = 5;
+    private double ammoSpeedY = -6.0;
     List<Enemy> enemiesList = new ArrayList<>();
     List<Line> ammoList = new ArrayList<>();
 
@@ -132,10 +131,10 @@ public class Controller {
         }
     }
 
-    public void spawnEnemies(Pane rootPane, Stage stage, int spawnNum, int enemyHealth) {
+    public void spawnEnemies(Pane rootPane, Stage stage, int spawnNum, int enemyHealth, double speed) {
         int distance = 0;
         while(spawnNum > 0) {
-            Enemy enemyObj = new Enemy(enemyHealth, damageDealt);
+            Enemy enemyObj = new Enemy(enemyHealth, speed, damageDealt);
 
             enemyObj.setCenterX(250+distance);
             enemyObj.setCenterY(100);
@@ -149,13 +148,16 @@ public class Controller {
             distance+=80;
         }
     }
-
+    
     public void moveEnemies(Stage stage) {
         for(Enemy enemyObject : enemiesList) {
-            double newCenterX = enemyObject.getCenterX()+EnemySpeedX;
+            double enemySpeedX = enemyObject.speed;
+            double newCenterX = enemyObject.getCenterX();
             if(newCenterX >= stage.getWidth()-5 || newCenterX <= 0) {
-                EnemySpeedX = -EnemySpeedX;
+                enemySpeedX = -enemySpeedX;
+                enemyObject.speed = enemySpeedX;
             }
+            newCenterX += enemySpeedX;
             enemyObject.setCenterX(newCenterX);
         }
     }

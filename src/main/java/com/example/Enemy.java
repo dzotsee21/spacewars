@@ -6,11 +6,13 @@ import javafx.scene.shape.Circle;
 
 public class Enemy extends Circle{
     int hp;
+    double speed;
     Label damageDealt;
 
 
-    Enemy(int hp, Label damageDealt) {
+    Enemy(int hp, double speed, Label damageDealt) {
         this.hp = hp;
+        this.speed = speed;
         this.damageDealt = damageDealt;
     }
 
