@@ -23,6 +23,7 @@ public class App extends Application {
     private boolean pressedRight = false;
     private boolean pressedLeft = false;
     private boolean pressedSpace = false;
+    private boolean pressedShift = false;
 
     public static void main(String[] args) {
         launch(args);
@@ -68,6 +69,12 @@ public class App extends Application {
                 if(pressedLeft && (controller.playerX+300) > 0) {
                     controller.moveLeft();
                 }
+                if(pressedShift) {
+                    controller.moveSpeed = 7;
+                }
+                else if(!pressedShift) {
+                    controller.moveSpeed = 5;
+                }
                 if(pressedSpace) {
                     controller.onPlayAudio();
                     controller.shootAmmo(rootPane, stage);
@@ -98,6 +105,9 @@ public class App extends Application {
                 case A:
                     pressedLeft = true;
                     break;
+                case SHIFT:
+                    pressedShift = true;
+                    break;
             }
         });
 
@@ -115,6 +125,9 @@ public class App extends Application {
                 case A:
                     pressedLeft = false;
                     break; 
+                case SHIFT:
+                    pressedShift = false;
+                    break;
                 case SPACE:
                     pressedSpace = true;
                     break;

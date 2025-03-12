@@ -22,9 +22,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Controller {
-    private double moveSpeed = 5;
     private double ammoSpeedY = -6.0;
     private int waveNum = 1;
+    double moveSpeed = 5;
     List<Enemy> enemiesList = new ArrayList<>();
     List<Line> ammoList = new ArrayList<>();
 
