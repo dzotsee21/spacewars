@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
@@ -22,11 +23,13 @@ import javafx.util.Duration;
 
 public class Controller {
     private double moveSpeed = 4;
-    private double speedX = 5.0;
+    private double EnemySpeedX = 5.0;
+    private double ammoSpeedY = -5.0;
     List<Enemy> enemiesList = new ArrayList<>();
+    List<Line> ammoList = new ArrayList<>();
 
     @FXML
-    private Circle player;
+    Circle player;
     double playerX;
     double playerY;
     @FXML
@@ -63,7 +66,7 @@ public class Controller {
         player.setCenterX(playerX-=moveSpeed);
     }
 
-    public Line shootAmmo(Pane rootPane) {
+    public void shootAmmo(Pane rootPane, Stage stage) {
         Line ammo = new Line();
         ammo.setFill(Color.WHITE);
         ammo.setStroke(Color.WHITE);
@@ -72,34 +75,67 @@ public class Controller {
         double ammoEndX;
         double ammoEndY;
 
-        ammo.setFill(Color.AQUA);
         ammoStartX = playerX+300;
         ammoStartY = playerY+313;
 
         ammoEndX = playerX+300;
         ammoEndY = playerY+333;
-        
-        ammo.setStartX(ammoStartX);
-        ammo.setStartY(ammoStartY);
 
+        ammo.setStartX(ammoStartX);
         ammo.setEndX(ammoEndX);
+        ammo.setStartY(ammoStartY);
         ammo.setEndY(ammoEndY);
 
         rootPane.getChildren().add(ammo);
-
-        TranslateTransition translate = new TranslateTransition();
-        translate.setNode(ammo);
-        translate.setByY(ammo.getStartY()-1500);
-        translate.setDuration(Duration.millis(1000));
-        translate.play();
-
-        return ammo;
+        ammoList.add(ammo);        
     }
 
-    public void spawnEnemies(Pane rootPane, Stage stage, int spawnNum) {
+    public void moveAmmo(Pane rootPane) {
+        ammoList = checkAmmos(rootPane);
+        for(Line ammo : ammoList) {
+            double newStartY = ammo.getStartY()+ammoSpeedY;
+            double newEndY = ammo.getEndY()+ammoSpeedY;
+            ammo.setStartY(newStartY);
+            ammo.setEndY(newEndY);
+        }
+    }
+
+    public void checkIfHit(Pane rootPane) {
+        HashMap<Enemy, List<Double>> enemyPositions = getEnemyPos();
+        List<Line> ammoToRemove = new ArrayList<>();
+        List<Enemy> enemiesToRemove = new ArrayList<>();
+        for(Line ammo : ammoList) {
+            for(Enemy enemyObject : enemyPositions.keySet()) {
+                List<Double> enemyPosition = enemyPositions.get(enemyObject);
+                if((ammo.getStartX() >= enemyPosition.get(0) && ammo.getStartX() <= enemyPosition.get(1)) && (ammo.getStartY() >= enemyPosition.get(2) && ammo.getStartY() <= enemyPosition.get(3))) {
+                    boolean damaged = enemyObject.damage(10);
+                    rootPane.getChildren().remove(ammo);
+                    ammoToRemove.add(ammo);
+                    if(damaged) {
+                        enemiesToRemove.add(enemyObject);
+                    }
+                    else {
+                        System.out.println("HIIT BITCH! HIT!");
+                    }
+                    break;
+                }
+            }
+        }
+
+        for(Enemy enemyObject : enemiesToRemove) {
+            enemiesList.remove(enemyObject);
+            rootPane.getChildren().remove(enemyObject);
+        }
+
+        for(Line ammo : ammoToRemove) {
+            ammoList.remove(ammo);
+        }
+    }
+
+    public void spawnEnemies(Pane rootPane, Stage stage, int spawnNum, int enemyHealth) {
         int distance = 0;
         while(spawnNum > 0) {
-            Enemy enemyObj = new Enemy(4, damageDealt);
+            Enemy enemyObj = new Enemy(enemyHealth, damageDealt);
 
             enemyObj.setCenterX(250+distance);
             enemyObj.setCenterY(100);
@@ -107,7 +143,6 @@ public class Controller {
             enemyObj.setFill(Color.RED);
 
             rootPane.getChildren().add(enemyObj);
-
             enemiesList.add(enemyObj);
             
             spawnNum--;
@@ -117,9 +152,9 @@ public class Controller {
 
     public void moveEnemies(Stage stage) {
         for(Enemy enemyObject : enemiesList) {
-            double newCenterX = enemyObject.getCenterX()+speedX;
+            double newCenterX = enemyObject.getCenterX()+EnemySpeedX;
             if(newCenterX >= stage.getWidth()-5 || newCenterX <= 0) {
-                speedX = -speedX;
+                EnemySpeedX = -EnemySpeedX;
             }
             enemyObject.setCenterX(newCenterX);
         }
@@ -135,16 +170,44 @@ public class Controller {
         return aliveEnemies;
     }
 
+    private List<Line> checkAmmos(Pane rootPane) {
+        List<Line> inRangeAmmos = new ArrayList<>();
+        for(Line ammo : ammoList) {
+            if(ammo.getStartY() >= -10) {
+                inRangeAmmos.add(ammo);  
+            }
+            else {
+                rootPane.getChildren().remove(ammo);
+            }
+        }
+        return inRangeAmmos;
+    }
+
     public HashMap<Enemy, List<Double>> getEnemyPos() {
         HashMap<Enemy, List<Double>> enemiesPos = new HashMap<Enemy, List<Double>>();
         enemiesList = checkEnemies();
         for(Enemy enemyObject : enemiesList) {
-            double startX = ((enemyObject.getCenterX())-enemyObject.getRadius());
-            double endX = ((enemyObject.getCenterX())+enemyObject.getRadius());
-            double startY = enemyObject.getCenterY();
+            double startX = enemyObject.getCenterX()-enemyObject.getRadius();
+            double endX = enemyObject.getCenterX()+enemyObject.getRadius();
+            double startY = enemyObject.getCenterY()-enemyObject.getRadius();
+            double endY = enemyObject.getCenterY()+enemyObject.getRadius();
 
-            enemiesPos.put(enemyObject, Arrays.asList(startX, endX, startY));
+            enemiesPos.put(enemyObject, Arrays.asList(startX, endX, startY, endY));
         }
         return enemiesPos;
+    }
+
+    public void touchEnemy(Circle player, Stage stage) {
+        HashMap<Enemy, List<Double>> enemiesPos = getEnemyPos();
+        double playerPosX = playerX+300;
+        double playerPosY = playerY+333;
+
+        for(Enemy object : enemiesPos.keySet()) {
+            List<Double> enemyPosition = enemiesPos.get(object);
+            if((playerPosX >= enemyPosition.get(0) && playerPosX <= enemyPosition.get(1)) && (playerPosY <= enemyPosition.get(3) && playerPosY >= enemyPosition.get(2))) {
+                System.out.println("YOU DIED!");
+                stage.close();
+            }
+        }
     }
 }

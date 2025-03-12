@@ -22,6 +22,7 @@ public class App extends Application {
     private boolean pressedBackward = false;
     private boolean pressedRight = false;
     private boolean pressedLeft = false;
+    private boolean pressedSpace = false;
 
     public static void main(String[] args) {
         launch(args);
@@ -38,19 +39,22 @@ public class App extends Application {
 
         Pane rootPane = (Pane) root;
 
-        controller.spawnEnemies(rootPane, stage, 1);
+        controller.spawnEnemies(rootPane, stage, 9, 25);
 
         setupKeyHandlers(scene, controller, rootPane);
-        mainGameLoop(controller, stage);
+        mainGameLoop(controller, stage, rootPane);
 
         stage.setScene(scene);
         stage.show();
     }
 
-    private void mainGameLoop(Controller controller, Stage stage) {
+    private void mainGameLoop(Controller controller, Stage stage, Pane rootPane) {
         AnimationTimer gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
+                controller.moveEnemies(stage);
+                controller.touchEnemy(controller.player, stage);
+
                 // movements
                 if(pressedForward && (controller.playerY+333) > 0) {
                         controller.moveUp();
@@ -64,8 +68,14 @@ public class App extends Application {
                 if(pressedLeft && (controller.playerX+300) > 0) {
                     controller.moveLeft();
                 }
-
-                controller.moveEnemies(stage);
+                if(pressedSpace) {
+                    controller.onPlayAudio();
+                    controller.shootAmmo(rootPane, stage);
+                    pressedSpace = false;
+                }
+                
+                controller.moveAmmo(rootPane);
+                controller.checkIfHit(rootPane);
             }
         };
         gameLoop.start();
@@ -104,22 +114,7 @@ public class App extends Application {
                     pressedLeft = false;
                     break; 
                 case SPACE:
-                    controller.onPlayAudio();
-                    HashMap<Enemy, List<Double>> enemyPositions = controller.getEnemyPos();
-                    Line ammo = controller.shootAmmo(rootPane);
-
-                    for(Enemy object : enemyPositions.keySet()) {
-                        List<Double> enemyPosition = enemyPositions.get(object);
-                        if(ammo.getStartX() >= enemyPosition.get(0) && ammo.getStartX() <= enemyPosition.get(1) && ammo.getStartY() >= enemyPosition.get(2)) {
-                            boolean damaged = object.damage(1);
-                            if(damaged) {
-                                rootPane.getChildren().remove(object);
-                            }
-                            else {
-                                System.out.println("DAMAGE DEALT!");
-                            }
-                        }
-                    }
+                    pressedSpace = true;
                     break;
             }
         });
