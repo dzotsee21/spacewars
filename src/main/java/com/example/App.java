@@ -38,7 +38,7 @@ public class App extends Application {
         root.setId("pane");
         Controller controller = loader.getController();
         Scene scene = new Scene(root);
-        scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+        scene.getStylesheets().addAll(this.getClass().getResource("static/style.css").toExternalForm());
 
         Pane rootPane = (Pane) root;
 

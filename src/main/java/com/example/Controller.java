@@ -53,7 +53,7 @@ public class Controller {
     // methods
     public void onPlayAudio() {
         try {
-            String path = getClass().getResource("shoot.wav").toURI().toString();
+            String path = getClass().getResource("static/shoot.wav").toURI().toString();
             Media media = new Media(path);
             MediaPlayer mediaPlayer = new MediaPlayer(media);
             mediaView.setMediaPlayer(mediaPlayer);
@@ -91,7 +91,7 @@ public class Controller {
     }
     
     public void doubleGoldPerHit() {
-        if(goldPerHit+1 < 9) {
+        if(goldPerHitLevel+1 < 9) {
             int costOfUpgrade = costOfGoldPerHit[goldPerHit+1];
             if(gold >= costOfUpgrade) {
                 goldPerHit *= 2;
