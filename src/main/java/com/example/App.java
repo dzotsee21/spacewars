@@ -25,6 +25,7 @@ public class App extends Application {
     private boolean pressedSpace = false;
     private boolean pressedShift = false;
     private boolean pressedR = false;
+    private boolean pressedE = false;
 
     public static void main(String[] args) {
         launch(args);
@@ -85,6 +86,10 @@ public class App extends Application {
                     controller.doublePlayerDamage();
                     pressedR = false;
                 }
+                if(pressedE) {
+                    controller.doubleGoldPerHit();
+                    pressedE = false;
+                }
                 controller.shootEnemyAmmo(rootPane);
                 controller.moveAmmo(rootPane);
                 controller.moveEnemyAmmo(rootPane, stage.getWidth());
@@ -139,6 +144,9 @@ public class App extends Application {
                     break;
                 case R:
                     pressedR = true;
+                    break;
+                case E:
+                    pressedE = true;
                     break;
             }
         });

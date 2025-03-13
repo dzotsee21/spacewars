@@ -27,6 +27,8 @@ public class Controller {
     private double enemyAmmoSpeedY = 4.0; 
     private int waveNum = 1;
     private int enemyHealth = 1;
+    private int[] costOfGoldPerHit = {0, 10, 20, 40, 80, 120, 160, 240, 360};
+    private int goldPerHitLevel = 0;
     double moveSpeed = 5;
     int playerDamage = 1;
     List<Enemy> enemiesList = new ArrayList<>();
@@ -38,6 +40,7 @@ public class Controller {
     double playerX;
     double playerY;
     int gold;
+    int goldPerHit = 1;
     @FXML
     Label goldCount;
     @FXML
@@ -83,8 +86,27 @@ public class Controller {
             goldCount.setText(Integer.valueOf(gold).toString());
         }
         else {
-            System.out.println("NOT ENOUGH GOLD! - need: " +playerDamage*10);
+            System.out.println("NOT ENOUGH GOLD! - need: " + playerDamage*10);
         }        
+    }
+    
+    public void doubleGoldPerHit() {
+        if(goldPerHit+1 < 9) {
+            int costOfUpgrade = costOfGoldPerHit[goldPerHit+1];
+            if(gold >= costOfUpgrade) {
+                goldPerHit *= 2;
+                gold -= costOfUpgrade;
+                goldCount.setText(Integer.valueOf(gold).toString());
+                goldPerHitLevel += 1;
+            }
+            else {
+                System.out.println("NOT ENOUGH GOLD! - need: " + costOfUpgrade);
+
+            }
+        }
+        else {
+            System.out.println("REACHED MAX LEVEL!!");
+        }
     }
 
     public void shootAmmo(Pane rootPane) {
@@ -174,13 +196,14 @@ public class Controller {
                 List<Double> enemyPosition = enemyPositions.get(enemyObject);
                 if((ammo.getStartX() >= enemyPosition.get(0) && ammo.getStartX() <= enemyPosition.get(1)) && (ammo.getStartY() >= enemyPosition.get(2) && ammo.getStartY() <= enemyPosition.get(3))) {
                     boolean damaged = enemyObject.damage(playerDamage);
+                    gold += goldPerHit;
                     rootPane.getChildren().remove(ammo);
                     ammoToRemove.add(ammo);
                     if(damaged) {
                         gold += 10;
-                        goldCount.setText(Integer.valueOf(gold).toString());
                         enemiesToRemove.add(enemyObject);
                     }
+                    goldCount.setText(Integer.valueOf(gold).toString());
                     break;
                 }
             }
@@ -314,7 +337,7 @@ public class Controller {
     public void checkNewWave(Pane rootPane, Stage stage) {
         boolean waveEnded = checkWave();
         if(waveEnded) {
-            enemyHealth *= 2*waveNum;
+            enemyHealth += 2*waveNum;
             spawnEnemies(rootPane, stage, 2*waveNum, enemyHealth, 5);
             waveNum++;
             waveCount.setText(Integer.valueOf(waveNum).toString());
