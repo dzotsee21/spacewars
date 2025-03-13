@@ -70,7 +70,7 @@ public class App extends Application {
                     controller.moveLeft();
                 }
                 if(pressedShift) {
-                    controller.moveSpeed = 7;
+                    controller.moveSpeed = 9;
                 }
                 else if(!pressedShift) {
                     controller.moveSpeed = 5;

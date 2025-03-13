@@ -191,12 +191,14 @@ public class Controller {
     }
 
     void spawnEnemies(Pane rootPane, Stage stage, int spawnNum, int enemyHealth, double speed) {
-        int distance = 0;
+        boolean downByOne = false;
+        int enemySpawnDistanceX = 0;
+        int enemySpawnDistanceY = 0;
         while(spawnNum > 0) {
             Enemy enemyObj = new Enemy(enemyHealth, speed, damageDealt);
 
-            enemyObj.setCenterX(250+distance);
-            enemyObj.setCenterY(100);
+            enemyObj.setCenterX(250+enemySpawnDistanceX);
+            enemyObj.setCenterY(100+enemySpawnDistanceY);
             enemyObj.setRadius(26);
             enemyObj.setFill(Color.RED);
 
@@ -204,8 +206,27 @@ public class Controller {
             enemiesList.add(enemyObj);
             
             spawnNum--;
-            distance+=80;
+            if(enemySpawnDistanceY > 0 && !downByOne && enemySpawnDistanceX-80>= 0) {
+                enemySpawnDistanceY+=80;
+                enemySpawnDistanceX-=80;
+                downByOne = true;
+            }
+            else if(downByOne) {
+                enemySpawnDistanceX-=80;
+            }
+            else {
+                if(enemySpawnDistanceX+80+250 >= stage.getWidth()) {
+                    enemySpawnDistanceY+=80;
+                    enemySpawnDistanceX-=80;
+                    downByOne = true;
+                }
+                else {
+                    enemySpawnDistanceX+=80;
+                }                
+            }
+
         }
+        downByOne = false;
     }
     
     public void moveEnemies(Stage stage) {
