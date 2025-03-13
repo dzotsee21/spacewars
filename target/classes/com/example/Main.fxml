@@ -30,6 +30,16 @@
             <Font name="Agency FB" size="23.0" />
          </font>
       </Label>
+      <Label layoutY="62.0" prefHeight="62.0" prefWidth="111.0" text="Gold:">
+         <font>
+            <Font name="Agency FB" size="21.0" />
+         </font>
+      </Label>
+      <Label fx:id="goldCount" layoutX="40.0" layoutY="79.0" text="0">
+         <font>
+            <Font name="Agency FB" size="23.0" />
+         </font>
+      </Label>
    </children>
 
 </AnchorPane>

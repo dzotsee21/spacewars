@@ -24,6 +24,7 @@ public class App extends Application {
     private boolean pressedLeft = false;
     private boolean pressedSpace = false;
     private boolean pressedShift = false;
+    private boolean pressedR = false;
 
     public static void main(String[] args) {
         launch(args);
@@ -40,7 +41,7 @@ public class App extends Application {
 
         Pane rootPane = (Pane) root;
 
-        controller.spawnEnemies(rootPane, stage, 3, 25, 5);
+        controller.spawnEnemies(rootPane, stage, 3, 5, 5);
 
         setupKeyHandlers(scene, controller, rootPane);
         mainGameLoop(controller, stage, rootPane);
@@ -78,14 +79,17 @@ public class App extends Application {
                 if(pressedSpace) {
                     controller.onPlayAudio();
                     controller.shootAmmo(rootPane);
-                    controller.shootEnemyAmmo(rootPane);
                     pressedSpace = false;
                 }
-                
+                if(pressedR) {
+                    controller.doublePlayerDamage();
+                    pressedR = false;
+                }
+                controller.shootEnemyAmmo(rootPane);
                 controller.moveAmmo(rootPane);
                 controller.moveEnemyAmmo(rootPane, stage.getWidth());
                 controller.checkIfHit(rootPane);
-                controller.checkIfPlayerHit(rootPane);
+                controller.checkIfPlayerHit(rootPane, stage);
                 controller.checkNewWave(rootPane, stage);
             }
         };
@@ -132,6 +136,9 @@ public class App extends Application {
                     break;
                 case SPACE:
                     pressedSpace = true;
+                    break;
+                case R:
+                    pressedR = true;
                     break;
             }
         });

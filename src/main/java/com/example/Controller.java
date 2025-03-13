@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Stream;
 
 import javafx.animation.TranslateTransition;
@@ -25,8 +26,9 @@ public class Controller {
     private double ammoSpeedY = 6.0;
     private double enemyAmmoSpeedY = 4.0; 
     private int waveNum = 1;
+    private int enemyHealth = 1;
     double moveSpeed = 5;
-    int playerDamage = 100;
+    int playerDamage = 1;
     List<Enemy> enemiesList = new ArrayList<>();
     List<Line> ammoList = new ArrayList<>();
     List<Line> enemyAmmoList = new ArrayList<>();
@@ -35,6 +37,9 @@ public class Controller {
     Circle player;
     double playerX;
     double playerY;
+    int gold;
+    @FXML
+    Label goldCount;
     @FXML
     Label damageDealt;
     @FXML
@@ -71,6 +76,17 @@ public class Controller {
         player.setCenterX(playerX-=moveSpeed);
     }
 
+    public void doublePlayerDamage() {
+        if(gold >= playerDamage*10) {
+            gold -= playerDamage*10;
+            playerDamage*=2;
+            goldCount.setText(Integer.valueOf(gold).toString());
+        }
+        else {
+            System.out.println("NOT ENOUGH GOLD! - need: " +playerDamage*10);
+        }        
+    }
+
     public void shootAmmo(Pane rootPane) {
         Line ammo = new Line();
         ammo.setFill(Color.WHITE);
@@ -97,9 +113,13 @@ public class Controller {
 
     
     public void shootEnemyAmmo(Pane rootPane) {
+        Random random = new Random();
+        boolean[] shootOrNo = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true};
+        int shootRandomChoice = random.nextInt(shootOrNo.length);
+        boolean shoot = shootOrNo[shootRandomChoice];
+
         for(Enemy enemyObject : enemiesList) {
-            if(enemyObject.shoot) {
-                System.out.println("HOOT!");
+            if(enemyObject.shoot && shoot) {
                 Line ammo = new Line();
                 ammo.setFill(Color.WHITE);
                 ammo.setStroke(Color.WHITE);
@@ -157,10 +177,9 @@ public class Controller {
                     rootPane.getChildren().remove(ammo);
                     ammoToRemove.add(ammo);
                     if(damaged) {
+                        gold += 10;
+                        goldCount.setText(Integer.valueOf(gold).toString());
                         enemiesToRemove.add(enemyObject);
-                    }
-                    else {
-                        System.out.println("HIIT BITCH! HIT!");
                     }
                     break;
                 }
@@ -177,7 +196,7 @@ public class Controller {
         }
     }
 
-    public void checkIfPlayerHit(Pane rootPane) {
+    public void checkIfPlayerHit(Pane rootPane, Stage stage) {
         double startX = player.getCenterX()-player.getRadius()+300;
         double endX = player.getCenterX()+player.getRadius()+300;
         double startY = player.getCenterY()-player.getRadius()+333;
@@ -185,7 +204,8 @@ public class Controller {
 
         for(Line ammo : enemyAmmoList) {
             if((ammo.getStartX() >= startX && ammo.getEndX() <= endX) && (ammo.getStartY() >= startY && ammo.getEndY() <= endY)) {
-                System.out.println("KABOOOM MATHA FUCKER!");
+                System.out.println("YOU DIED!");
+                stage.close();
             }
         }
     }
@@ -294,7 +314,8 @@ public class Controller {
     public void checkNewWave(Pane rootPane, Stage stage) {
         boolean waveEnded = checkWave();
         if(waveEnded) {
-            spawnEnemies(rootPane, stage, 2*waveNum, 5*waveNum, 5);
+            enemyHealth *= 2*waveNum;
+            spawnEnemies(rootPane, stage, 2*waveNum, enemyHealth, 5);
             waveNum++;
             waveCount.setText(Integer.valueOf(waveNum).toString());
         }
