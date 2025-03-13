@@ -227,7 +227,7 @@ public class Controller {
 
         for(Line ammo : enemyAmmoList) {
             if((ammo.getStartX() >= startX && ammo.getEndX() <= endX) && (ammo.getStartY() >= startY && ammo.getEndY() <= endY)) {
-                System.out.println("YOU DIED!");
+                System.out.println("YOU DIED");
                 stage.close();
             }
         }
@@ -366,7 +366,7 @@ public class Controller {
         for(Enemy object : enemiesPos.keySet()) {
             List<Double> enemyPosition = enemiesPos.get(object);
             if((playerPosX >= enemyPosition.get(0) && playerPosX <= enemyPosition.get(1)) && (playerPosY <= enemyPosition.get(3) && playerPosY >= enemyPosition.get(2))) {
-                System.out.println("YOU DIED!");
+                System.out.println("YOU DIED");
                 stage.close();
             }
         }
