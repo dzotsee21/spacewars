@@ -19,9 +19,15 @@ public class Enemy extends Circle{
         double[] leftOrRightSpeed = {speed, -speed};
         int speedRandomChoice = random.nextInt(leftOrRightSpeed.length);
         int shootRandomChoice = random.nextInt(shootOrNotShoot.length);
-        this.hp = hp;
         this.speed = leftOrRightSpeed[speedRandomChoice];
         this.shoot = shootOrNotShoot[shootRandomChoice];
+        if(this.shoot) {
+            this.hp = hp*2;
+        }
+        else {
+            this.hp = hp;
+
+        }
         this.damageDealt = damageDealt;
     }
 
