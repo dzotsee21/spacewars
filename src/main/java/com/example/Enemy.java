@@ -3,7 +3,6 @@ package com.example;
 import java.util.Random;
 
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 
 public class Enemy extends Circle{
@@ -16,6 +15,7 @@ public class Enemy extends Circle{
 
     Enemy(int hp, double speed, Label damageDealt, int wave) {
         if(wave == 10) {
+            @SuppressWarnings("unused")
             boolean[] shootOrNotShoot = {false, false, false, true};
         }
         Random random = new Random();

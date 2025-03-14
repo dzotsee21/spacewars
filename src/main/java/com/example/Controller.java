@@ -6,12 +6,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Stream;
 
-import javafx.animation.TranslateTransition;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
@@ -20,8 +16,8 @@ import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
+@SuppressWarnings("exports")
 public class Controller {
     private double ammoSpeedY = 6.0;
     private double enemyAmmoSpeedY = 4.0; 
@@ -358,7 +354,7 @@ public class Controller {
         return enemiesPos;
     }
 
-    public void touchEnemy(@SuppressWarnings("exports") Circle player, @SuppressWarnings("exports") Stage stage) {
+    public void touchEnemy(Circle player, Stage stage) {
         HashMap<Enemy, List<Double>> enemiesPos = getEnemyPos();
         double playerStartX = player.getCenterX()-player.getRadius()+300;
         double playerEndX = player.getCenterX()+player.getRadius()+300;
