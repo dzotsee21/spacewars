@@ -10,36 +10,38 @@
    <children>
       <Circle fx:id="player" fill="#46ef28" layoutX="300.0" layoutY="333.0" radius="26.0" smooth="false" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
       <MediaView fx:id="mediaView" fitHeight="200.0" fitWidth="200.0" layoutX="200.0" layoutY="71.0" />
-      <Label prefHeight="62.0" prefWidth="111.0" text="Damage dealt:">
+      <Label layoutX="14.0" prefHeight="62.0" prefWidth="111.0" text="Damage dealt:" textFill="WHITE">
          <font>
             <Font name="Agency FB" size="21.0" />
          </font>
       </Label>
-      <Label fx:id="damageDealt" layoutX="94.0" layoutY="17.0" text="0">
+      <Label fx:id="damageDealt" layoutX="108.0" layoutY="17.0" text="0" textFill="WHITE">
          <font>
             <Font name="Agency FB" size="23.0" />
          </font>
       </Label>
-      <Label layoutY="31.0" prefHeight="62.0" prefWidth="111.0" text="Wave: ">
+      <Label layoutY="31.0" prefHeight="62.0" prefWidth="111.0" text="Wave: " textFill="WHITE">
          <font>
             <Font name="Agency FB" size="21.0" />
          </font>
       </Label>
-      <Label fx:id="waveCount" layoutX="45.0" layoutY="48.0" text="1">
+      <Label fx:id="waveCount" layoutX="45.0" layoutY="48.0" text="1" textFill="WHITE">
          <font>
             <Font name="Agency FB" size="23.0" />
          </font>
       </Label>
-      <Label layoutY="62.0" prefHeight="62.0" prefWidth="111.0" text="Gold:">
+      <Label layoutX="14.0" layoutY="62.0" prefHeight="62.0" prefWidth="111.0" text="Gold:" textFill="WHITE">
          <font>
             <Font name="Agency FB" size="21.0" />
          </font>
       </Label>
-      <Label fx:id="goldCount" layoutX="40.0" layoutY="79.0" text="0">
+      <Label fx:id="goldCount" layoutX="54.0" layoutY="79.0" text="0" textFill="WHITE">
          <font>
             <Font name="Agency FB" size="23.0" />
          </font>
       </Label>
+      <Label layoutY="23.0" text="(R)" textFill="WHITE" />
+      <Label layoutY="84.0" text="(E)" textFill="WHITE" />
    </children>
 
 </AnchorPane>

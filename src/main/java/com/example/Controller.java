@@ -238,7 +238,7 @@ public class Controller {
         int enemySpawnDistanceX = 0;
         int enemySpawnDistanceY = 0;
         while(spawnNum > 0) {
-            Enemy enemyObj = new Enemy(enemyHealth, speed, damageDealt, wave);
+            Enemy enemyObj = new Enemy(enemyHealth, speed, damageDealt, waveNum);
 
             enemyObj.setCenterX(250+enemySpawnDistanceX);
             enemyObj.setCenterY(100+enemySpawnDistanceY);
