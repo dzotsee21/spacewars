@@ -14,7 +14,10 @@ public class Enemy extends Circle{
     boolean[] shootOrNotShoot = {false, false, false, false, true};
 
 
-    Enemy(int hp, double speed, Label damageDealt) {
+    Enemy(int hp, double speed, Label damageDealt, int wave) {
+        if(wave == 10) {
+            boolean[] shootOrNotShoot = {false, false, false, true};
+        }
         Random random = new Random();
         double[] leftOrRightSpeed = {speed, -speed};
         int speedRandomChoice = random.nextInt(leftOrRightSpeed.length);
