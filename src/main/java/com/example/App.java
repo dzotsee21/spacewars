@@ -1,18 +1,13 @@
 package com.example;
 
 import javafx.animation.AnimationTimer;
-import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import javafx.scene.shape.Line;
 
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * JavaFX App
@@ -32,7 +27,7 @@ public class App extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(@SuppressWarnings("exports") Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Main.fxml"));
         Parent root = loader.load();
         root.setId("pane");
@@ -119,6 +114,8 @@ public class App extends Application {
                 case SHIFT:
                     pressedShift = true;
                     break;
+                default:
+                    break;
             }
         });
 
@@ -147,6 +144,8 @@ public class App extends Application {
                     break;
                 case E:
                     pressedE = true;
+                    break;
+                default:
                     break;
             }
         });

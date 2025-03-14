@@ -358,14 +358,16 @@ public class Controller {
         return enemiesPos;
     }
 
-    public void touchEnemy(Circle player, Stage stage) {
+    public void touchEnemy(@SuppressWarnings("exports") Circle player, @SuppressWarnings("exports") Stage stage) {
         HashMap<Enemy, List<Double>> enemiesPos = getEnemyPos();
-        double playerPosX = playerX+300;
-        double playerPosY = playerY+333;
+        double playerStartX = player.getCenterX()-player.getRadius()+300;
+        double playerEndX = player.getCenterX()+player.getRadius()+300;
+        double playerStartY = player.getCenterY()-player.getRadius()+333;
+        double playerEndY = player.getCenterY()+player.getRadius()+333;
 
         for(Enemy object : enemiesPos.keySet()) {
             List<Double> enemyPosition = enemiesPos.get(object);
-            if((playerPosX >= enemyPosition.get(0) && playerPosX <= enemyPosition.get(1)) && (playerPosY <= enemyPosition.get(3) && playerPosY >= enemyPosition.get(2))) {
+            if((playerStartX >= enemyPosition.get(0) && playerEndX <= enemyPosition.get(1)) && (playerStartY <= enemyPosition.get(3) && playerEndY >= enemyPosition.get(2))) {
                 System.out.println("YOU DIED");
                 stage.close();
             }
