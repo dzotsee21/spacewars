@@ -92,7 +92,7 @@ public class Controller {
     
     public void doubleGoldPerHit() {
         if(goldPerHitLevel+1 < 9) {
-            int costOfUpgrade = costOfGoldPerHit[goldPerHit+1];
+            int costOfUpgrade = costOfGoldPerHit[goldPerHitLevel+1];
             if(gold >= costOfUpgrade) {
                 goldPerHit *= 2;
                 gold -= costOfUpgrade;
