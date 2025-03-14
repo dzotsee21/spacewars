@@ -11,7 +11,7 @@ public class Enemy extends Circle{
     double speed;
     boolean shoot;
     Label damageDealt;
-    boolean[] shootOrNotShoot = {false, false, false, false, false, true};
+    boolean[] shootOrNotShoot = {false, false, false, false, true};
 
 
     Enemy(int hp, double speed, Label damageDealt) {

@@ -82,7 +82,7 @@ public class Controller {
     public void doublePlayerDamage() {
         if(gold >= playerDamage*10) {
             gold -= playerDamage*10;
-            playerDamage*=2;
+            playerDamage = playerDamage*2;
             goldCount.setText(Integer.valueOf(gold).toString());
         }
         else {
@@ -337,7 +337,7 @@ public class Controller {
     public void checkNewWave(Pane rootPane, Stage stage) {
         boolean waveEnded = checkWave();
         if(waveEnded) {
-            enemyHealth += 2*waveNum;
+            enemyHealth *= 2;
             spawnEnemies(rootPane, stage, 2*waveNum, enemyHealth, 5);
             waveNum++;
             waveCount.setText(Integer.valueOf(waveNum).toString());
